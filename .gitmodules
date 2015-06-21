@@ -2,3 +2,7 @@
   path = bundle/vim-sensible
   url = git://github.com/tpope/vim-sensible.git
   ignore = dirty
+[submodule "bundle/base16"]
+  path = bundle/base16
+  url = git://github.com/chriskempson/base16-vim.git
+  ignore = dirty

@@ -13,3 +13,8 @@ endif
 
 "Tell Pathogen to bring everything in
 execute pathogen#infect()
+
+"Set the color scheme
+set background=dark
+let base16colorspace=256
+colorscheme base16-eighties
