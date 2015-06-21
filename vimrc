@@ -14,6 +14,12 @@ endif
 "Tell Pathogen to bring everything in
 execute pathogen#infect()
 
+"Default indentation settings
+set shiftwidth=2
+set softtabstop=2
+set expandtab
+set smartindent
+
 "Set the color scheme
 set background=dark
 let base16colorspace=256
