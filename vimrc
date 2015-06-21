@@ -66,3 +66,58 @@ endif
 
 "Always show the tabline
 set showtabline=2
+
+"vim-flagship hooks
+
+"Display a warning if fileformat isn't unix
+autocmd User Flags call Hoist("buffer", "%#warningmsg#%{&ff!='unix'?'['.&ff.']':''}%*")
+
+"Display a warning if file encoding isn't utf-8
+autocmd User Flags call Hoist("buffer", "%#warningmsg#%{(&fenc!='utf-8'&&&fenc!='')?'['.&fenc.']':''}%*")
+
+"display a warning if &et is wrong, or we have mixed-indenting
+autocmd User Flags call Hoist("buffer", "%#error#%{StatuslineTabWarning()}%*")
+
+"Display a warning if there is trailing whitespace somewhere
+autocmd User Flags call Hoist("buffer", "%#error#%{StatuslineTrailingSpaceWarning()}%*")
+
+"Display a warning if &paste is set
+autocmd User Flags call Hoist("buffer", "%#error#%{&paste?'[paste]':''}%*")
+
+"recalculate the trailing whitespace warning when idle, and after saving
+autocmd cursorhold,bufwritepost * unlet! b:statusline_trailing_space_warning
+
+"return '[Trailing \s]' if trailing white space is detected
+"return '' otherwise
+function! StatuslineTrailingSpaceWarning()
+  if !exists("b:statusline_trailing_space_warning")
+    if search('\s\+$', 'nw') != 0
+      let b:statusline_trailing_space_warning = '[Trailing \s]'
+    else
+      let b:statusline_trailing_space_warning = ''
+    endif
+  endif
+  return b:statusline_trailing_space_warning
+endfunction
+
+"recalculate the tab warning flag when idle and after writing
+autocmd cursorhold,bufwritepost * unlet! b:statusline_tab_warning
+
+"return '[&et]' if &et is set wrong
+"return '[mixed-indenting]' if spaces and tabs are used to indent
+"return an empty string if everything is fine
+function! StatuslineTabWarning()
+  if !exists("b:statusline_tab_warning")
+    let tabs = search('^\t', 'nw') != 0
+    let spaces = search('^ ', 'nw') != 0
+
+    if tabs && spaces
+      let b:statusline_tab_warning = '[mixed-indenting]'
+    elseif (spaces && !&et) || (tabs && &et)
+      let b:statusline_tab_warning = '[&et]'
+    else
+      let b:statusline_tab_warning = ''
+    endif
+  endif
+  return b:statusline_tab_warning
+endfunction
