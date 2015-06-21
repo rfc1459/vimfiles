@@ -54,3 +54,7 @@
   path = bundle/vim-markdown
   url = git://github.com/tpope/vim-markdown.git
   ignore = dirty
+[submodule "bundle/textile"]
+  path = bundle/textile
+  url = git://github.com/timcharper/textile.vim.git
+  ignore = dirty
