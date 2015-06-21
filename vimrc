@@ -20,6 +20,11 @@ set softtabstop=2
 set expandtab
 set smartindent
 
+"Add Go to the runtime path
+if !empty($GOROOT)
+  set runtimepath+=$GOROOT/misc/vim
+endif
+
 "Set the color scheme
 set background=dark
 let base16colorspace=256
