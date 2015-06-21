@@ -29,6 +29,16 @@ endif
 set wildmode=list:full
 set wildignore=*.o,*.obj,*~
 
+"Viminfo settings
+if has('viminfo')
+  if !empty($SUDO_USER) && $USER !=# $SUDO_USER
+    " NEVER EVER use .viminfo if we're running under sudo
+    set viminfo=
+  else
+    set viminfo=!,'20,<50,s10,h
+  endif
+endif
+
 "Set the color scheme
 set background=dark
 let base16colorspace=256
