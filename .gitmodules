@@ -38,3 +38,7 @@
   path = bundle/vim-git
   url = git://github.com/tpope/vim-git.git
   ignore = dirty
+[submodule "bundle/vim-transpose"]
+  path = bundle/vim-transpose
+  url = git://github.com/salsifis/vim-transpose.git
+  ignore = dirty
