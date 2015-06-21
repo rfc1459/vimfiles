@@ -185,6 +185,9 @@ map <Leader>F :CommandTFlush<CR>\|:CommandT %%<CR>
 "vim-json
 let g:vim_json_syntax_conceal = 0   "Don't hide double quotes in JSON files
 
+"Python (builtin)
+let g:python_highlight_builtins=1   "Highlight Python builtins
+
 "Misc
 
 "Jump back to the last position when opening a file except when writing commit
