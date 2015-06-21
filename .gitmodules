@@ -62,3 +62,7 @@
   path = bundle/gitolite
   url = git://github.com/tmatilai/gitolite.vim.git
   ignore = dirty
+[submodule "bundle/css"]
+  path = bundle/css
+  url = git://github.com/JulesWang/css.vim.git
+  ignore = dirty
