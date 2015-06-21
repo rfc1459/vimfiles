@@ -180,6 +180,11 @@ cnoremap %% <C-R>=expand('%:h').'/'<CR>
 map <Leader>f :CommandTFlush<CR>\|:CommandT<CR>
 map <Leader>F :CommandTFlush<CR>\|:CommandT %%<CR>
 
+"Plugin configuration
+
+"vim-json
+let g:vim_json_syntax_conceal = 0   "Don't hide double quotes in JSON files
+
 "Misc
 
 "Jump back to the last position when opening a file except when writing commit
