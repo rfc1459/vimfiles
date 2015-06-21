@@ -66,3 +66,7 @@
   path = bundle/css
   url = git://github.com/JulesWang/css.vim.git
   ignore = dirty
+[submodule "bundle/docker"]
+  path = bundle/docker
+  url = git://github.com/ekalinin/Dockerfile.vim.git
+  ignore = dirty
