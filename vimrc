@@ -121,3 +121,26 @@ function! StatuslineTabWarning()
   endif
   return b:statusline_tab_warning
 endfunction
+
+"Key bindings
+
+"Navigate through display lines
+nmap <Down> gj
+nmap <Up> gk
+
+"Have <C-L> clear the search highlight and reset the screen
+nnoremap <silent> <C-L> :nohls<CR><C-L>
+inoremap <silent> <C-L> <C-O>:nohls<CR>
+
+"Don't exit to Ex mode, I fucked up too many times with this...
+noremap Q gq
+
+"Use <Tab> and <S-Tab> to navigate through (guess what?) tabs
+nmap <Tab> gt
+nmap <S-Tab> gT
+
+"Quickfix keybindings
+map <A-o> :copen<CR>
+map <A-q> :cclose<CR>
+map <A-j> :cnext<CR>
+map <A-k> :cprevious<CR>
