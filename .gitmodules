@@ -30,3 +30,7 @@
   path = bundle/vim-dispatch
   url = git://github.com/tpope/vim-dispatch.git
   ignore = dirty
+[submodule "bundle/vim-surround"]
+  path = bundle/vim-surround
+  url = git://github.com/tpope/vim-surround.git
+  ignore = dirty
