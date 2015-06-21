@@ -92,6 +92,11 @@ endif
 "Always show the tabline
 set showtabline=2
 
+"Folding settings
+set foldmethod=marker "Fold based on markers
+set foldnestmax=3     "Deepest fold is 3 levels
+set nofoldenable      "Don't fold by default
+
 "vim-flagship hooks
 
 "Display a warning if fileformat isn't unix
