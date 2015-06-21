@@ -26,3 +26,7 @@
   path = bundle/vim-repeat
   url = git://github.com/tpope/vim-repeat.git
   ignore = dirty
+[submodule "bundle/vim-dispatch"]
+  path = bundle/vim-dispatch
+  url = git://github.com/tpope/vim-dispatch.git
+  ignore = dirty
