@@ -25,6 +25,10 @@ if !empty($GOROOT)
   set runtimepath+=$GOROOT/misc/vim
 endif
 
+"Tab completion handling
+set wildmode=list:full
+set wildignore=*.o,*.obj,*~
+
 "Set the color scheme
 set background=dark
 let base16colorspace=256
