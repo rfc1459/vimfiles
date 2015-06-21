@@ -10,3 +10,7 @@
   path = bundle/vim-flagship
   url = git://github.com/tpope/vim-flagship.git
   ignore = dirty
+[submodule "bundle/bufexplorer"]
+  path = bundle/bufexplorer
+  url = git://github.com/jlanzarotta/bufexplorer
+  ignore = dirty
