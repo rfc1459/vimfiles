@@ -14,3 +14,7 @@
   path = bundle/bufexplorer
   url = git://github.com/jlanzarotta/bufexplorer
   ignore = dirty
+[submodule "bundle/command-t"]
+  path = bundle/command-t
+  url = git://github.com/wincent/Command-T.git
+  ignore = dirty
