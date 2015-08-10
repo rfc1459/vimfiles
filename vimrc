@@ -188,6 +188,13 @@ let g:vim_json_syntax_conceal = 0   "Don't hide double quotes in JSON files
 "Python (builtin)
 let g:python_highlight_builtins=1   "Highlight Python builtins
 
+"vim-go
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_structs = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
+
 "Misc
 
 "Jump back to the last position when opening a file except when writing commit
