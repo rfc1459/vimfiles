@@ -180,6 +180,9 @@ cnoremap %% <C-R>=expand('%:h').'/'<CR>
 map <Leader>f :CommandTFlush<CR>\|:CommandT<CR>
 map <Leader>F :CommandTFlush<CR>\|:CommandT %%<CR>
 
+"Tagbar keybindings
+map <Leader>t :TagbarToggle<CR>
+
 "Plugin configuration
 
 "vim-json
