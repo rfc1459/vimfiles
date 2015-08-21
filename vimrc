@@ -182,6 +182,7 @@ map <Leader>F :CommandTFlush<CR>\|:CommandT %%<CR>
 
 "Tagbar keybindings
 map <Leader>t :TagbarToggle<CR>
+map <F8> :TagbarToggle<CR>
 
 "Plugin configuration
 
