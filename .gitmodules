@@ -70,3 +70,6 @@
   path = bundle/docker
   url = git://github.com/ekalinin/Dockerfile.vim.git
   ignore = dirty
+[submodule "bundle/tagbar"]
+	path = bundle/tagbar
+	url = git://github.com/majutsushi/tagbar.git
