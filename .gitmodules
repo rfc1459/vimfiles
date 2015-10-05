@@ -74,3 +74,7 @@
 	path = bundle/tagbar
 	url = git://github.com/majutsushi/tagbar.git
 	ignore = dirty
+[submodule "bundle/vim-elixir"]
+	path = bundle/vim-elixir
+	url = git://github.com/elixir-lang/vim-elixir.git
+	ignore = dirty
