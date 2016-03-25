@@ -36,18 +36,6 @@ Then 'cd' into the repo and run this to initialize the various submodules:
     git submodule init
     git submodule update
 
-### Command-T Setup ###
-
-[Command-T][] requires a working ruby installation, a C compiler, ruby
-development files and a ruby-enabled version of Vim.
-
-Provided your environment meets the requirements, cd into
-~/.vim/bundle/command-t and run:
-
-    rake make
-
-to build Command-T.
-
 ### Activating the new configuration ###
 
 After finishing setup, you should create a new `.vimrc` file in your home
@@ -88,17 +76,11 @@ Dependencies
 
 You will need the following software on your system:
 
- * Ruby (plus its development files)
- * a working C compiler
  * Ncurses-term (in Linux only)
 
 On Debian derivatives, for example, you will have to do:
 
-    apt-get install build-essential ncurses-term ruby1.9-dev
-
-replacing `ruby1.9-dev` with the appropriate Ruby version for your system.
-
-As for Windows, you're on your own. Have fun.
+    apt-get install ncurses-term
 
 
 Vim? WTF?
@@ -118,5 +100,3 @@ Credits
  * Letting me know that versioning ~/.vim was a good idea: @vjt
  * Inspiration for cleanup: @mislav
  * Vim demigod: @tpope
-
-[Command-T]: https://wincent.com/products/command-t

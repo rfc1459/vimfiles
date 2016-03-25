@@ -175,11 +175,6 @@ map <A-q> :cclose<CR>
 map <A-j> :cnext<CR>
 map <A-k> :cprevious<CR>
 
-"Command-T keybindings
-cnoremap %% <C-R>=expand('%:h').'/'<CR>
-map <Leader>f :CommandTFlush<CR>\|:CommandT<CR>
-map <Leader>F :CommandTFlush<CR>\|:CommandT %%<CR>
-
 "Tagbar keybindings
 map <Leader>t :TagbarToggle<CR>
 map <F8> :TagbarToggle<CR>
