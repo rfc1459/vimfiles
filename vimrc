@@ -158,10 +158,6 @@ endfunction
 nmap <Down> gj
 nmap <Up> gk
 
-"Have <C-L> clear the search highlight and reset the screen
-nnoremap <silent> <C-L> :nohls<CR><C-L>
-inoremap <silent> <C-L> <C-O>:nohls<CR>
-
 "Don't exit to Ex mode, I fucked up too many times with this...
 noremap Q gq
 
