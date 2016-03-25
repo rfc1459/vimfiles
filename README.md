@@ -29,18 +29,13 @@ Usage
 Clone this repo into your home directory either as .vim (linux/mac) or
 vimfiles (Windows). Such as:
 
-    git clone git://github.com/rfc1459/vimfiles.git ~/.vim
-
-Then 'cd' into the repo and run this to initialize the various submodules:
-
-    git submodule init
-    git submodule update
+    git clone https://github.com/rfc1459/vimfiles.git ~/.vim
 
 ### Activating the new configuration ###
 
-After finishing setup, you should create a new `.vimrc` file in your home
-directory that loads the pre-configured one that comes bundled in this
-package. On Linux, a symbolic link will suffice:
+After cloning, you should create a new `.vimrc` file in your home directory
+that loads the pre-configured one that comes bundled in this package. On
+Linux, a symbolic link will suffice:
 
     $ ln -s ~/.vim/vimrc .vimrc
     $ ln -s ~/.vim/gvimrc .gvimrc
@@ -66,7 +61,7 @@ Help Tags
 
 At first usage of vim, type ":" while in command mode and then execute:
 
-    call pathogen#helptags()
+    Helptags
 
 This will make the plugins documentation available upon :help
 
@@ -99,4 +94,5 @@ Credits
 
  * Letting me know that versioning ~/.vim was a good idea: @vjt
  * Inspiration for cleanup: @mislav
+ * Ditching submodules for subtrees: @durdn
  * Vim demigod: @tpope
