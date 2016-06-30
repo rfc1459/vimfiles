@@ -15,3 +15,4 @@ bundle/vim-repeat git://github.com/tpope/vim-repeat.git
 bundle/vim-sensible git://github.com/tpope/vim-sensible.git
 bundle/vim-surround git://github.com/tpope/vim-surround.git
 bundle/vim-transpose git://github.com/salsifis/vim-transpose.git
+bundle/diffchar git://github.com/rickhowe/diffchar.vim.git
