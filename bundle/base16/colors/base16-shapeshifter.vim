@@ -1,6 +1,6 @@
 " base16-vim (https://github.com/chriskempson/base16-vim)
 " by Chris Kempson (http://chriskempson.com)
-" shapeshifter scheme by Tyler Benziger (http://tybenz.com)
+" Shapeshifter scheme by Tyler Benziger (http://tybenz.com)
 
 " This enables the coresponding base16-shell script to run so that
 " :colorscheme works in terminals supported by base16-shell scripts
@@ -8,19 +8,19 @@
 "   let g:base16_shell_path=base16-builder/output/shell/
 if !has('gui_running')
   if exists("g:base16_shell_path")
-    execute "silent !/bin/sh ".g:base16_shell_path."/base16-shapeshifter.".&background.".sh"
+    execute "silent !/bin/sh ".g:base16_shell_path."/base16-shapeshifter.sh"
   endif
 endif
 
 " GUI color definitions
-let s:gui00 = "000000"
-let s:gui01 = "040404"
-let s:gui02 = "102015"
-let s:gui03 = "343434"
-let s:gui04 = "555555"
-let s:gui05 = "ababab"
-let s:gui06 = "e0e0e0"
-let s:gui07 = "f9f9f9"
+let s:gui00 = "f9f9f9"
+let s:gui01 = "e0e0e0"
+let s:gui02 = "ababab"
+let s:gui03 = "555555"
+let s:gui04 = "343434"
+let s:gui05 = "102015"
+let s:gui06 = "040404"
+let s:gui07 = "000000"
 let s:gui08 = "e92f2f"
 let s:gui09 = "e09448"
 let s:gui0A = "dddd13"

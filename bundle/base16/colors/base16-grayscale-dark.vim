@@ -1,6 +1,6 @@
 " base16-vim (https://github.com/chriskempson/base16-vim)
 " by Chris Kempson (http://chriskempson.com)
-" Grayscale scheme by Alexandre Gavioli (https://github.com/Alexx2/)
+" Grayscale Dark scheme by Alexandre Gavioli (https://github.com/Alexx2/)
 
 " This enables the coresponding base16-shell script to run so that
 " :colorscheme works in terminals supported by base16-shell scripts
@@ -8,7 +8,7 @@
 "   let g:base16_shell_path=base16-builder/output/shell/
 if !has('gui_running')
   if exists("g:base16_shell_path")
-    execute "silent !/bin/sh ".g:base16_shell_path."/base16-grayscale.".&background.".sh"
+    execute "silent !/bin/sh ".g:base16_shell_path."/base16-grayscale-dark.sh"
   endif
 endif
 
@@ -60,7 +60,7 @@ endif
 " Theme setup
 hi clear
 syntax reset
-let g:colors_name = "base16-grayscale"
+let g:colors_name = "base16-grayscale-dark"
 
 " Highlighting function
 fun <sid>hi(group, guifg, guibg, ctermfg, ctermbg, attr, guisp)
