@@ -194,6 +194,9 @@ let g:go_highlight_interfaces = 1
 "diffchar
 let g:DiffUnit="Word1"
 
+"vim-test
+let test#strategy = "dispatch"
+
 "Misc
 
 "Jump back to the last position when opening a file except when writing commit
