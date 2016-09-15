@@ -1,31 +1,33 @@
+# frozen_string_literal: true
+
 require 'rspec/expectations'
 require 'tmpdir'
 require 'vimrunner'
+require 'vimrunner/rspec'
 
 class Buffer
-  attr_reader :file, :vim
-
   def initialize(vim, type)
-    @file = "test.#{type}"
+    @file = ".fixture.#{type}"
     @vim  = vim
   end
 
   def reindent(code)
     open code do
       # remove all indentation
-      vim.normal 'ggVG999<<'
+      @vim.normal 'ggVG999<<'
       # force vim to indent the file
-      vim.normal 'gg=G'
+      @vim.normal 'gg=G'
+      sleep 0.1 if ENV['CI']
     end
   end
 
   def syntax(code, pattern)
     read code
     # move cursor the pattern
-    vim.search pattern
+    @vim.search pattern
     # get a list of the syntax element
-    vim.echo <<-EOF
-      map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+    @vim.echo <<~EOF
+    map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
     EOF
   end
 
@@ -35,19 +37,14 @@ class Buffer
     read code
     # run vim commands
     yield if block_given?
-    vim.write
-    IO.read(file)
+    @vim.write
+    IO.read(@file)
   end
 
   def read(code)
-    File.open(file, 'w') { |f| f.write code }
-    vim.edit file
+    File.open(@file, 'w') { |f| f.write code }
+    @vim.edit @file
   end
-end
-
-def cleanup(string)
-  whitespace = string.scan(/^\s*/).first
-  string.gsub(/^#{whitespace}/, '')
 end
 
 {
@@ -58,13 +55,15 @@ end
     buffer = Buffer.new(VIM, type)
 
     match do |code|
-      actual = cleanup(code)
-      buffer.reindent(actual) == actual
+      buffer.reindent(code) == code
     end
 
     failure_message do |code|
-      actual = cleanup(code)
-      "got:\n\n#{buffer.reindent(actual)}\n  after elixir indentation"
+      <<~EOF
+      got:
+      #{buffer.reindent(code)}
+      after elixir indentation
+      EOF
     end
   end
 end
@@ -77,41 +76,36 @@ end
     buffer = Buffer.new(VIM, type)
 
     match do |code|
-      cleanup(code)
       buffer.syntax(code, pattern).include? syntax
     end
 
     failure_message do |code|
-      actual = cleanup(code)
-      "expected #{buffer.syntax(code, pattern)} to include syntax #{syntax}\nfor pattern: /#{pattern}/\n         in:\n\n#{actual}"
+      <<~EOF
+      expected #{buffer.syntax(code, pattern)}
+      to include syntax #{syntax}
+      for pattern: /#{pattern}/
+      in:
+        #{actual}
+      EOF
     end
 
     failure_message_when_negated do |code|
-      actual = cleanup(code)
-      "expected #{buffer.syntax(code, pattern)} not to include syntax #{syntax}\nfor pattern: /#{pattern}/\n         in:\n\n#{actual}"
+      <<~EOF
+      expected #{buffer.syntax(code, pattern)} not to include syntax #{syntax}
+      for pattern: /#{pattern}/
+      in:
+        #{actual}
+      EOF
     end
   end
 end
 
-RSpec.configure do |config|
-  config.before(:suite) do
+Vimrunner::RSpec.configure do |config|
+  config.reuse_server = true
+
+  config.start_vim do
     VIM = Vimrunner.start_gvim
-    VIM.prepend_runtimepath(File.expand_path('../..', __FILE__))
-    VIM.command('runtime ftdetect/elixir.vim')
-    VIM.command('runtime ftdetect/eelixir.vim')
-  end
-
-  config.after(:suite) do
-    VIM.kill
-  end
-
-  config.around(:each) do |example|
-    # cd into a temporary directory for every example.
-    Dir.mktmpdir do |dir|
-      Dir.chdir(dir) do
-        VIM.command("cd #{dir}")
-        example.call
-      end
-    end
+    VIM.add_plugin(File.expand_path('..', __dir__), 'ftdetect/elixir.vim')
+    VIM
   end
 end
