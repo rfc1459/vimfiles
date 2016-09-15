@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'Sigil syntax' do
@@ -38,7 +40,7 @@ describe 'Sigil syntax' do
     end
 
     it 'escapes double quotes unless only preceded by whitespace' do
-      expect(<<-EOF).to include_elixir_syntax('elixirSigilDelimiter', %q(^\s*\zs'"'))
+      expect(<<~EOF).to include_elixir_syntax('elixirSigilDelimiter', %q(^\s*\zs'"'))
         ~r"""
         foo """
         """
@@ -46,7 +48,7 @@ describe 'Sigil syntax' do
     end
 
     it 'escapes single quotes unless only preceded by whitespace' do
-      expect(<<-EOF).to include_elixir_syntax('elixirSigilDelimiter', %q(^\s*\zs'''))
+      expect(<<~EOF).to include_elixir_syntax('elixirSigilDelimiter', %q(^\s*\zs'''))
         ~r'''
         foo '''
         '''

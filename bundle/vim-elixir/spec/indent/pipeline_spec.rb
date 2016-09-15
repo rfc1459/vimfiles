@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
-describe 'Indenting' do
+describe 'Indenting pipeline' do
   it 'using multiline pipeline' do
-    expect(<<-EOF).to be_elixir_indentation
+    expect(<<~EOF).to be_elixir_indentation
     "a,b,c,d"
     |> String.split(",")
     |> Enum.reverse
@@ -10,7 +12,7 @@ describe 'Indenting' do
   end
 
   it 'attribuition using multline pipeline operator' do
-    expect(<<-EOF).to be_elixir_indentation
+    expect(<<~EOF).to be_elixir_indentation
     [ h | t ] = "a,b,c,d"
                 |> String.split(",")
                 |> Enum.reverse
@@ -18,7 +20,7 @@ describe 'Indenting' do
   end
 
   it 'function with pipeline operator' do
-    expect(<<-EOF).to be_elixir_indentation
+    expect(<<~EOF).to be_elixir_indentation
     def test do
       [ h | t ] = "a,b,c,d"
                   |> String.split(",")
@@ -30,7 +32,7 @@ describe 'Indenting' do
   end
 
   it 'do not breaks on `==`' do
-    expect(<<-EOF).to be_elixir_indentation
+    expect(<<~EOF).to be_elixir_indentation
     def test do
       my_post = Post
                 |> where([p], p.id == 10)
@@ -41,7 +43,7 @@ describe 'Indenting' do
   end
 
   it 'pipeline operator with block open' do
-    expect(<<-EOF).to be_elixir_indentation
+    expect(<<~EOF).to be_elixir_indentation
     def test do
       "a,b,c,d"
       |> String.split(",")
@@ -55,7 +57,7 @@ describe 'Indenting' do
   end
 
   it 'using a record with pipeline' do
-    expect(<<-EOF).to be_elixir_indentation
+    expect(<<~EOF).to be_elixir_indentation
     defrecord RECORD, field_a: nil, field_b: nil
 
     rec = RECORD.new

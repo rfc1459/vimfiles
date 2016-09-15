@@ -1,47 +1,49 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
-describe 'Indenting' do
-  specify 'lists' do
-    expect(<<-EOF).to be_elixir_indentation
-      def example do
-        [ :foo,
-          :bar,
-          :baz ]
-      end
+describe 'Indenting lists' do
+  it 'lists' do
+    expect(<<~EOF).to be_elixir_indentation
+    def example do
+      [ :foo,
+        :bar,
+        :baz ]
+    end
     EOF
   end
 
-  specify 'nested list' do
-    expect(<<-EOF).to be_elixir_indentation
+  it 'nested list' do
+    expect(<<~EOF).to be_elixir_indentation
+    [
       [
-        [
-          :foo
-        ]
+        :foo
       ]
+    ]
     EOF
   end
 
-  specify 'keyword list' do
-    expect(<<-EOF).to be_elixir_indentation
-      def project do
-        [ name: "mix",
-          version: "0.1.0",
-          deps: deps ]
-      end
+  it 'keyword list' do
+    expect(<<~EOF).to be_elixir_indentation
+    def project do
+      [ name: "mix",
+        version: "0.1.0",
+        deps: deps ]
+    end
     EOF
   end
 
-  specify 'keyword' do
-    expect(<<-EOF).to be_elixir_indentation
-      def config do
-        [ name:
-          "John" ]
-      end
+  it 'keyword' do
+    expect(<<~EOF).to be_elixir_indentation
+    def config do
+      [ name:
+        "John" ]
+    end
     EOF
   end
 
-  specify 'list of tuples' do
-    expect(<<-EOF).to be_elixir_indentation
+  it 'list of tuples' do
+    expect(<<~EOF).to be_elixir_indentation
     def test do
       [ { :cowboy, github: "extend/cowboy" },
         { :dynamo, "0.1.0-dev", github: "elixir-lang/dynamo" },
@@ -51,8 +53,8 @@ describe 'Indenting' do
     EOF
   end
 
-  specify 'list of lists' do
-    expect(<<-EOF).to be_elixir_indentation
+  it 'list of lists' do
+    expect(<<~EOF).to be_elixir_indentation
     def test do
       [ [:a, :b, :c],
         [:d, :e, :f] ]
@@ -60,8 +62,8 @@ describe 'Indenting' do
     EOF
   end
 
-  specify 'complex list' do
-    expect(<<-EOF).to be_elixir_indentation
+  it 'complex list' do
+    expect(<<~EOF).to be_elixir_indentation
     def test do
       [ app: :first,
         version: "0.0.1",
@@ -74,8 +76,8 @@ describe 'Indenting' do
     EOF
   end
 
-  specify 'lists without whitespace' do
-    expect(<<-EOF).to be_elixir_indentation
+  it 'lists without whitespace' do
+    expect(<<~EOF).to be_elixir_indentation
     def project do
       [{:bar, path: "deps/umbrella/apps/bar"},
        {:umbrella, path: "deps/umbrella"}]
@@ -83,8 +85,8 @@ describe 'Indenting' do
     EOF
   end
 
-  specify 'lists with line break after square brackets' do
-    expect(<<-EOF).to be_elixir_indentation
+  it 'lists with line break after square brackets' do
+    expect(<<~EOF).to be_elixir_indentation
     def project do
       [
         { :bar, path: "deps/umbrella/apps/bar" },
@@ -94,33 +96,33 @@ describe 'Indenting' do
     EOF
   end
 
-  specify 'multiple lists with multiline elements' do
-    expect(<<-EOF).to be_elixir_indentation
-      def test do
-        a = [
-          %{
-            foo: 1,
-            bar: 2
-          }
-        ]
-
-        b = %{
-          [
-            :foo,
-            :bar
-          ]
+  it 'multiple lists with multiline elements' do
+    expect(<<~EOF).to be_elixir_indentation
+    def test do
+      a = [
+        %{
+          foo: 1,
+          bar: 2
         }
+      ]
 
+      b = %{
         [
-          a,
-          b
+          :foo,
+          :bar
         ]
-      end
+      }
+
+      [
+        a,
+        b
+      ]
+    end
     EOF
   end
 
   it 'indent function body even when breaking the parameter list in many lines' do
-    expect(<<-EOF).to be_elixir_indentation
+    expect(<<~EOF).to be_elixir_indentation
     def create(conn, %{
       "grant_type" => "password",
       "username" => username,
@@ -132,7 +134,7 @@ describe 'Indenting' do
   end
 
   it 'parameters list in many lines' do
-    expect(<<-EOF).to be_elixir_indentation
+    expect(<<~EOF).to be_elixir_indentation
     def double(x) do
       add(x,
           y)
@@ -141,7 +143,7 @@ describe 'Indenting' do
   end
 
   it 'long parameters list in many lines' do
-    expect(<<-EOF).to be_elixir_indentation
+    expect(<<~EOF).to be_elixir_indentation
     def double(x) do
       add(x,
           y,
@@ -149,5 +151,30 @@ describe 'Indenting' do
           z)
     end
     EOF
+  end
+
+  describe 'restore last indentation after multiline lists' do
+    it 'correct indentation after long parameter list' do
+      expect(<<~EOF).to be_elixir_indentation
+      def double(x) do
+        resutl = add(x,
+                     z)
+        div(result, 2)
+      end
+      EOF
+    end
+
+    it 'correct indentation after long map list' do
+      expect(<<~EOF).to be_elixir_indentation
+      defmodule Module do
+        @person1 { name: "name",
+          age: 18,
+          enabled?: true }
+        @person2 { name: "other name",
+          age: 21,
+          enabled?: false }
+      end
+      EOF
+    end
   end
 end
