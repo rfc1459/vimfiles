@@ -177,4 +177,60 @@ describe 'Indenting lists' do
       EOF
     end
   end
+
+  describe 'mix of opened symbols' do
+    it 'indents every opened symbol' do
+      expect(<<~EOF).to be_elixir_indentation
+      def test_another_feature do
+        assert json_response(conn, 200) == %{
+          "results" => [
+            %{
+              "id" => result.id,
+            }
+          ]
+        }
+      end
+      EOF
+    end
+
+    it 'reset indentation on not nested lists' do
+      expect(<<~EOF).to be_elixir_indentation
+      defmodule Mod do
+        def test do
+          foo == %{
+          }
+
+          assert json_response == %{
+            "id" => "identifier"
+          }
+        end
+      end
+      EOF
+    end
+  end
+
+  it 'reset the indent level afer long parameter list' do
+    expect(<<~EOF).to be_elixir_indentation
+    defmodule Mod do
+      def fun do
+        json_logger = Keyword.merge(Application.get_env(:logger, :json_logger, []), options)
+        Application.put_env(:logger, :json_logger, json_logger)
+        level  = Keyword.get(json_logger, :level)
+
+        %{level: level, output: :console}
+      end
+    end
+    EOF
+  end
+
+  it 'reset the indent level after complex list of parameters' do
+    expect(<<~EOF).to be_elixir_indentation
+    defmodule Mod do
+      def fun do
+        Enum.each(s.routing_keys, fn k -> Queue.bind(chan, s.queue, s.exchange, routing_key: k) end)
+        Basic.consume(chan, s.queue, nil, no_ack: true)
+      end
+    end
+    EOF
+  end
 end
