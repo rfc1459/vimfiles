@@ -40,9 +40,9 @@ if has('viminfo')
 endif
 
 "Set the color scheme
-set background=dark
-let base16colorspace=256
-colorscheme base16-eighties
+let g:molokai_original = 1
+let g:rehash256 = 1
+colorscheme molokai
 
 "Never *EVER* use modelines on versions of vim which are known to be
 "vulnerable to sandbox escaping. The keyword is "known", by the way.
