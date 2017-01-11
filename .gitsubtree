@@ -17,3 +17,4 @@ bundle/vim-transpose git://github.com/salsifis/vim-transpose.git
 bundle/diffchar git://github.com/rickhowe/diffchar.vim.git
 bundle/vim-elixir git://github.com/elixir-lang/vim-elixir.git
 bundle/vim-test git://github.com/janko-m/vim-test.git
+bundle/vim-puppet git://github.com/rodjek/vim-puppet.git
