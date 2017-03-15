@@ -47,7 +47,7 @@ describe 'Indenting blocks' do
   end
 
   it 'guard in function' do
-    expect(<<~EOF).to include_elixir_syntax('elixirKeyword', 'is_atom')
+    expect(<<~EOF).to include_elixir_syntax('elixirKernelFunction', 'is_atom')
     defmodule M do
       def fun(a) when is_atom(a) do
         1
@@ -158,5 +158,16 @@ describe 'Indenting blocks' do
       end
       EOF
     end
+  end
+
+  it 'indenting with a blank line in it' do
+    expect(<<~EOF).to be_elixir_indentation
+    scope "/", API do
+      pipe_through :api # Use the default browser stack
+
+      get "/url", Controller, :index
+      post "/url", Controller, :create
+    end
+    EOF
   end
 end
