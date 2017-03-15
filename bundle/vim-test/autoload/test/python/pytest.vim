@@ -43,5 +43,8 @@ endfunction
 
 function! s:nearest_test(position) abort
   let name = test#base#nearest_test(a:position, g:test#python#patterns)
-  return get(name['test'], 0, '')
+  let path = [get(name['namespace'], 0, ''), get(name['test'], 0, '')]
+  call filter(path, '!empty(v:val)')
+
+  return join(path, '::')
 endfunction
