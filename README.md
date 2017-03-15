@@ -18,9 +18,10 @@ Currently the following testing frameworks are supported:
 | **Shell**      | Bats                                            | `bats`                                       |
 | **VimScript**  | VSpec, Vader.vim                                | `vspec`, `vader`                             |
 | **Lua**        | Busted                                          | `busted`                                     |
-| **PHP**        | PHPUnit, Behat, PHPSpec                         | `phpunit`, `behat`, `phpspec`                |
+| **PHP**        | PHPUnit, Behat, PHPSpec, Codeception            | `phpunit`, `behat`, `phpspec`, `codeception` |
 | **Perl**       | Prove                                           | `prove`                                      |
 | **Java**       | Maven                                           | `maventest`                                  |
+| **Crystal**    | Crystal                                         | `crystalspec`                                |
 
 ## Features
 
@@ -38,7 +39,7 @@ in, so they all work in the same unified way.
 
 ## Setup
 
-Using [vim-plug](https://github.com/junegunn/vim-plug), add 
+Using [vim-plug](https://github.com/junegunn/vim-plug), add
 ```vim
 Plug 'janko-m/vim-test'
 ```
@@ -84,6 +85,7 @@ let test#strategy = "dispatch"
 | **[VimShell]**                  | `vimshell` | Runs test commands in a shell written in VimScript.                              |
 | **[Vim&nbsp;Tmux&nbsp;Runner]** | `vtr`      | Runs test commands in a small tmux pane.                                         |
 | **[VimProc]**                   | `vimproc`  | Runs test commands asynchronously.                                               |
+| **[AsyncRun]**                  | `asyncrun` | Runs test commands asynchronosuly using new APIs in Vim 8 and NeoVim.            |
 | **Terminal.app**                | `terminal` | Sends test commands to Terminal (useful in MacVim GUI).                          |
 | **iTerm2.app**                  | `iterm`    | Sends test commands to iTerm2 >= 2.9 (useful in MacVim GUI).                     |
 
@@ -335,4 +337,5 @@ Copyright © Janko Marohnić. Distributed under the same terms as Vim itself. Se
 [`autochdir`]: http://vimdoc.sourceforge.net/htmldoc/options.html#'autochdir'
 [rspec.vim]: https://github.com/thoughtbot/vim-rspec
 [vroom.vim]: https://github.com/skalnik/vim-vroom
+[AsyncRun]: https://github.com/skywind3000/asyncrun.vim
 [M]: http://github.com/qrush/m

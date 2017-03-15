@@ -16,12 +16,12 @@ describe "PyTest"
     view +2 test_class.py
     TestNearest
 
-    Expect g:test#last_command == 'py.test test_class.py::test_numbers'
+    Expect g:test#last_command == 'py.test test_class.py::TestNumbers::test_numbers'
 
     view +1 test_class.py
     TestNearest
 
-    Expect g:test#last_command == 'py.test test_class.py'
+    Expect g:test#last_command == 'py.test test_class.py::TestNumbers'
 
     view +1 test_method.py
     TestNearest
