@@ -1,20 +1,12 @@
 function! test#run(type, arguments) abort
-  if &autowrite || &autowriteall
-    silent! wall
-  endif
+  call s:before_run()
 
-  if exists('g:test#project_root')
-    execute 'cd' g:test#project_root
-  endif
-
-  if exists('g:projectionist_heuristics')
-    let alternate_file = get(filter(projectionist#query_file('alternate'), 'filereadable(v:val)'), 0)
-  endif
+  let alternate_file = s:alternate_file()
 
   if test#test_file(expand('%'))
     let position = s:get_position(expand('%'))
     let g:test#last_position = position
-  elseif exists('alternate_file') && !empty(alternate_file) && test#test_file(alternate_file)
+  elseif !empty(alternate_file) && test#test_file(alternate_file) && (!exists('g:test#last_position') || alternate_file !=# g:test#last_position['file'])
     let position = s:get_position(alternate_file)
   elseif exists('g:test#last_position')
     let position = g:test#last_position
@@ -35,13 +27,13 @@ function! test#run(type, arguments) abort
     call test#execute(runner, args)
   endif
 
-  if exists('g:test#project_root')
-    execute 'cd -'
-  endif
+  call s:after_run()
 endfunction
 
 function! test#run_last(arguments) abort
   if exists('g:test#last_command')
+    call s:before_run()
+
     let strategy = s:extract_strategy_from_command(a:arguments)
 
     if empty(strategy)
@@ -52,9 +44,15 @@ function! test#run_last(arguments) abort
     let cmd = cmd + a:arguments
 
     call test#shell(join(cmd), strategy)
+
+    call s:after_run()
   else
     call s:echo_failure('No tests were run so far')
   endif
+endfunction
+
+function! test#exists() abort
+  return test#test_file(expand('%')) || test#test_file(s:alternate_file())
 endfunction
 
 function! test#visit() abort
@@ -73,10 +71,9 @@ function! test#execute(runner, args, ...) abort
     else
       let strategy = get(g:, 'test#strategy')
     endif
-
-    if empty(strategy)
-      let strategy = 'basic'
-    endif
+  endif
+  if empty(strategy)
+    let strategy = 'basic'
   endif
 
   let args = a:args
@@ -115,9 +112,14 @@ function! test#shell(cmd, strategy) abort
 endfunction
 
 function! test#determine_runner(file) abort
-  for [language, runners] in items(g:test#runners)
+  for [language, runners] in items(test#get_runners())
     for runner in runners
       let runner = tolower(language).'#'.tolower(runner)
+      if exists("g:test#enabled_runners")
+        if index(g:test#enabled_runners, runner) < 0
+          continue
+        endif
+      endif
       if test#base#test_file(runner, fnamemodify(a:file, ':.'))
         return runner
       endif
@@ -125,8 +127,51 @@ function! test#determine_runner(file) abort
   endfor
 endfunction
 
+function! test#get_runners() abort
+  if exists('g:test#runners')
+    let custom_runners = g:test#runners
+  elseif exists('g:test#custom_runners')
+    let custom_runners = g:test#custom_runners
+  else
+    let custom_runners = {}
+  endif
+
+  return s:extend(custom_runners, g:test#default_runners)
+endfunction
+
 function! test#test_file(file) abort
   return !empty(test#determine_runner(a:file))
+endfunction
+
+function! s:alternate_file() abort
+  if get(g:, 'test#no_alternate') | return '' | endif
+  let alternate_file = ''
+
+  if empty(alternate_file) && exists('g:loaded_projectionist')
+    let alternate_file = get(filter(projectionist#query_file('alternate'), 'filereadable(v:val)'), 0, '')
+  endif
+
+  if empty(alternate_file) && exists('g:loaded_rails') && !empty(rails#app())
+    let alternate_file = rails#buffer().alternate()
+  endif
+
+  return alternate_file
+endfunction
+
+function! s:before_run() abort
+  if &autowrite || &autowriteall
+    silent! wall
+  endif
+
+  if exists('g:test#project_root')
+    execute 'cd' g:test#project_root
+  endif
+endfunction
+
+function! s:after_run() abort
+  if exists('g:test#project_root')
+    execute 'cd -'
+  endif
 endfunction
 
 function! s:get_position(path) abort
@@ -152,4 +197,15 @@ function! s:echo_failure(message) abort
   echohl WarningMsg
   echo a:message
   echohl None
+endfunction
+
+function! s:extend(source, dict) abort
+  let result = {}
+  for [key, value] in items(a:source)
+    let result[key] = value
+  endfor
+  for [key, value] in items(a:dict)
+    let result[key] = get(result, key, []) + value
+  endfor
+  return result
 endfunction

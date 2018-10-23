@@ -18,7 +18,11 @@ function! test#base#options(runner, ...) abort
 endfunction
 
 function! test#base#executable(runner) abort
-  return get(g:, 'test#'.a:runner.'#executable', test#{a:runner}#executable())
+  if exists('g:test#'.a:runner.'#executable')
+    return g:test#{a:runner}#executable
+  else
+    return test#{a:runner}#executable()
+  endif
 endfunction
 
 function! test#base#build_args(runner, args) abort
@@ -35,7 +39,7 @@ endfunction
 
 function! test#base#no_colors() abort
   let strategy = get(g:, 'test#strategy', 'basic')
-  return has('gui_running') && strategy == 'basic'
+  return has('gui_running') && strategy ==# 'basic'
 endfunction
 
 " Takes a position and a dictionary of patterns, and returns list of strings
