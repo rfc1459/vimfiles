@@ -103,7 +103,11 @@ endfunction
 " Returns v:servername if present, or @hostname() when sshed.  This is the
 " default tab prefix.
 function! flagship#id() abort
-  return v:servername . (empty($SSH_TTY) ? '': '@'.substitute(hostname(), '\..*', '', ''))
+  let servername = v:servername
+  if has('nvim')
+    let servername = fnamemodify(servername, ':h:t')
+  endif
+  return servername . (empty($SSH_TTY) ? '': '@'.substitute(hostname(), '\..*', '', ''))
 endfunction
 
 " Returns "Help" for help buffers and the filetype otherwise.
@@ -176,13 +180,17 @@ endfunction
 " zero as both arguments to get the global working directory (ignoring the
 " current window).  Will return a path relative to 'cdpath' when possible;
 " pass 'raw' as an additional argument to disable this.  Pass 'shorten' to
-" call pathshorten() on the result.
+" call a variant of pathshorten() on the result.
 function! flagship#cwd(...) abort
   call flagship#winleave()
   let args = copy(a:000)
   let gcwd = exists('*haslocaldir') ? get(g:, 'flagship_cwd', '') : getcwd()
   if a:0 > 1 && a:1 && a:2
-    let path = gettabwinvar(a:1, a:2, 'flagship_cwd')
+    if !exists('g:flagship_no_getcwd_local') && has('patch-7.4.1126')
+      let path = getcwd(a:2, a:1)
+    else
+      let path = gettabwinvar(a:1, a:2, 'flagship_cwd')
+    endif
     let path = empty(path) ? gcwd : path
     let buf = bufname(tabpagebuflist(a:1)[a:2-1])
   elseif a:0 && a:1 is# 0
@@ -197,10 +205,10 @@ function! flagship#cwd(...) abort
     call remove(args, 0)
   endwhile
   if index(args, 'raw') < 0
-    let path = s:cwdpresent(path, index(args, 'relative') >= 0)
+    let path = s:cwdpresent(path)
   endif
   if index(args, 'shorten') >= 0
-    let path = pathshorten(path)
+    let path = matchstr(path, '^[^\/]*') . pathshorten(matchstr(path, '[\/].*'))
   endif
   return path
 endfunction
@@ -255,16 +263,51 @@ function! s:locatepath(path, paths) abort
   return [parent, path]
 endfunction
 
-function! s:cwdpresent(dir, relative) abort
+function! s:cwdpresent(dir) abort
   let parents = map(split(&cdpath, ','), 'expand(v:val)')
   let dir = a:dir
-  call filter(parents, '!empty(v:val)')
-  if a:relative
-    call insert(parents, gcwd)
-    let dir = (dir ==# gcwd) ? '.' : dir
-  endif
+  call filter(parents, '!empty(v:val) && v:val !=# expand("~")')
   let dir = s:locatepath(dir, parents)[1]
   return substitute(dir, '^'.escape(expand('~'), '\'), '\~', '')
+endfunction
+
+function! s:cpath(path, ...) abort
+  if exists('+fileignorecase') && &fileignorecase
+    let path = tolower(a:path)
+  else
+    let path = a:path
+  endif
+  let path = tr(path, s:slash(), '/')
+  return a:0 ? path ==# s:cpath(a:1) : path
+endfunction
+
+function! flagship#filename(...) abort
+  if &buftype ==# 'quickfix'
+    return '[Quickfix List]'
+  elseif &buftype =~# '^\%(nofile\|acwrite\|terminal\)$'
+    return empty(@%) ? '[Scratch]' : @%
+  elseif empty(@%)
+    return '[No Name]'
+  elseif &buftype ==# 'help'
+    return fnamemodify(@%, ':t')
+  endif
+  let f = @%
+  let ns = substitute(matchstr(f, '^\a\a\+\ze:'), '^\a', '\u&', 'g')
+  if len(ns) && exists('*' . ns . 'Real')
+    try
+      let f = {ns}Real(f)
+    catch
+    endtry
+  endif
+  let cwd = getcwd()
+  let home = expand('~')
+  if s:cpath((f . '/')[0 : len(cwd)], cwd . '/')
+    let f = f[len(cwd) + 1 : -1]
+    let f = len(f) ? f : '.'
+  elseif len(home) && s:cpath((f . '/')[0 : len(home)], home . '/')
+    let f = '~' . f[len(home) : -1]
+  endif
+  return f
 endfunction
 
 unlet! s:did_setup
@@ -419,6 +462,7 @@ function! flagship#statusline(...) abort
     let s .= '%=' . (&ruler ? ' '.rulerformat : '')
   endif
   let s = s:in('winnr()=='.winnr().'?'.tabpagenr().':-'.winnr()).s.s:in(0)
+  let s = substitute(s, '%-\=\d*\.\=\d*\zsf\(\s\)\=', '{flagship#filename()."\1"}', 'g')
   return substitute(s, '%=', '\=s:flags("file").s:flags("buffer")."%=".s:flags("window",-1)', '')
 endfunction
 
@@ -479,7 +523,7 @@ function! flagship#flags_for(type) abort
         let flag = '%'.Hl.'*'.flag.'%*'
       elseif Hl ==? 'ignore'
         continue
-      else
+      elseif !empty(Hl)
         let flag = '%#'.Hl.'#'.flag.'%*'
       endif
     endif
