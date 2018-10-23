@@ -3,15 +3,25 @@ function! test#strategy#vimscript(cmd) abort
 endfunction
 
 function! test#strategy#basic(cmd) abort
-  if s:restorescreen()
-    execute '!'.s:pretty_command(a:cmd)
+  if has('nvim')
+    -tabnew
+    call termopen(a:cmd)
+    startinsert
   else
-    execute '!'.a:cmd
-  endif
+    if s:restorescreen()
+      execute '!'.s:pretty_command(a:cmd)
+    else
+      execute '!'.a:cmd
+    endif
+  end
 endfunction
 
 function! test#strategy#make(cmd) abort
   call s:execute_with_compiler(a:cmd, 'make')
+endfunction
+
+function! test#strategy#make_bang(cmd) abort
+  call s:execute_with_compiler(a:cmd, 'make!')
 endfunction
 
 function! test#strategy#neomake(cmd) abort
@@ -30,27 +40,29 @@ function! test#strategy#dispatch(cmd) abort
   execute 'Dispatch '.a:cmd
 endfunction
 
+function! test#strategy#dispatch_background(cmd) abort
+  execute 'Dispatch! '.a:cmd
+endfunction
+
 function! test#strategy#vimproc(cmd) abort
   execute 'VimProcBang '.a:cmd
 endfunction
 
 function! test#strategy#neovim(cmd) abort
-  let opts = {'suffix': ' # vim-test'}
-  function! opts.close_terminal()
-    if bufnr(self.suffix) != -1
-      execute 'bdelete!' bufnr(self.suffix)
-    end
-  endfunction
-  call opts.close_terminal()
-
-  botright new
-  call termopen(a:cmd . opts.suffix, opts)
-  au BufDelete <buffer> wincmd p
+  let term_position = get(g:, 'test#neovim#term_position', 'botright')
+  execute term_position . ' new'
+  call termopen(a:cmd)
+  au BufDelete <buffer> wincmd p " switch back to last window
   startinsert
 endfunction
 
+function! test#strategy#vimterminal(cmd) abort
+  botright new
+  call term_start(['/bin/sh', '-c', a:cmd], {'curwin':1})
+endfunction
+
 function! test#strategy#neoterm(cmd) abort
-  call neoterm#do(a:cmd)
+  call neoterm#do({ 'cmd': a:cmd})
 endfunction
 
 function! test#strategy#vtr(cmd) abort
@@ -59,7 +71,7 @@ endfunction
 
 function! test#strategy#vimux(cmd) abort
   if exists('g:test#preserve_screen') && !g:test#preserve_screen
-    if exists("g:VimuxRunnerIndex") && _VimuxHasRunner(g:VimuxRunnerIndex) != -1
+    if exists('g:VimuxRunnerIndex') && _VimuxHasRunner(g:VimuxRunnerIndex) != -1
       call VimuxRunCommand(!s:Windows() ? 'clear' : 'cls')
       call VimuxClearRunnerHistory()
     endif
@@ -78,15 +90,17 @@ function! test#strategy#vimshell(cmd) abort
 endfunction
 
 function! test#strategy#terminal(cmd) abort
-  call s:execute_script('osx_terminal', s:pretty_command(a:cmd))
+  let cmd = join(['cd ' . shellescape(getcwd()), s:pretty_command(a:cmd)], '; ')
+  call s:execute_script('osx_terminal', cmd)
 endfunction
 
 function! test#strategy#iterm(cmd) abort
-  call s:execute_script('osx_iterm', s:pretty_command(a:cmd))
+  let cmd = join(['cd ' . shellescape(getcwd()), s:pretty_command(a:cmd)], '; ')
+  call s:execute_script('osx_iterm', cmd)
 endfunction
 
 
-function! s:execute_with_compiler(cmd, script)
+function! s:execute_with_compiler(cmd, script) abort
   try
     let default_makeprg = &l:makeprg
     let default_errorformat = &l:errorformat
@@ -96,8 +110,6 @@ function! s:execute_with_compiler(cmd, script)
       let compiler = dispatch#compiler_for_program(a:cmd)
       if !empty(compiler)
         execute 'compiler ' . compiler
-      else
-        echoerr 'Could not find compiler for command: '.a:cmd
       endif
     endif
 
@@ -123,22 +135,20 @@ endfunction
 
 function! s:pretty_command(cmd) abort
   let clear = !s:Windows() ? 'clear' : 'cls'
-  let cd = 'cd ' . shellescape(getcwd())
   let echo  = !s:Windows() ? 'echo -e '.shellescape(a:cmd) : 'Echo '.shellescape(a:cmd)
   let separator = !s:Windows() ? '; ' : ' & '
 
   if !get(g:, 'test#preserve_screen')
-    return join([l:clear, l:cd, l:echo, a:cmd], l:separator)
+    return join([l:clear, l:echo, a:cmd], l:separator)
   else
-    return join([l:cd, l:echo, a:cmd], l:separator)
+    return join([l:echo, a:cmd], l:separator)
   endif
 endfunction
 
 function! s:command(cmd) abort
-  let cd = 'cd ' . shellescape(getcwd())
   let separator = !s:Windows() ? '; ' : ' & '
 
-  return join([l:cd, a:cmd], l:separator)
+  return join([a:cmd], l:separator)
 endfunction
 
 function! s:Windows() abort
@@ -150,13 +160,5 @@ function! s:restorescreen() abort
     return &restorescreen
   else
     return !empty(&t_ti) || !empty(&t_te)
-  endif
-endfunction
-
-function! s:cat(filename) abort
-  if s:Windows()
-    return system('type '.a:filename)
-  else
-    return system('cat '.a:filename)
   endif
 endfunction
