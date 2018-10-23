@@ -40,6 +40,16 @@ changed units are highlighted with `DiffText`. In addition, `DiffAdd` is always
 used for the added units and both the previous and next character of the
 deleted units are shown in bold/underline.
 
+In order to check the actual differences in a line, you can use `:EDChar`
+command and echo the lines for range. A changed, added, and deleted unit is
+shown as `[-...-][+...+]`, `[+...+]`, and `[-...-]` respectively, while showing its
+highlight. If a strike highlighting is available such as on GUI and some
+terminal, the deleted unit is highlighted with the strike instead and `[+`, `+]`,
+`[-`, and `-]` are eliminated. This command tries to shorten some equivalent units
+and show `...` instead, if the line is too long to fit on the command line.
+The line number is shown if `number` or `relativenumber` option is set in the
+window. When [!] is used, nothing is shorten and all lines are displayed.
+
 This plugin traces the differences based on a `g:DiffUnit`. Its default is
 'Word1' and it handles a \w\\+ word and a \W character as a difference unit.
 There are other types of word provided and you can also set 'Char' to compare
@@ -55,7 +65,10 @@ difference unit, and `[b` or `[e` to the start or end position of the previous
 unit. Those keymaps, `<F7>` and `<F8>` are configurable in your vimrc and so on.
 
 This plugin always keeps the exact differences updated while editing if a
-`g:DiffUpdate` is enabled and TextChanged/TextChangedI events are available.
+`g:DiffUpdate` is enabled and TextChanged/InsertLeave events are available.
+Like line-based `diffget`/`diffput` and `do`/`dp` vim commands, you can use
+`<Leader>g` and `<Leader>p` commands in normal mode to get and put each difference
+unit, where the cursor is on, between 2 buffers and undo its difference.
 
 This plugin has been using "An O(NP) Sequence Comparison Algorithm" developed
 by S.Wu, et al., which always finds an optimum sequence quickly. But for
@@ -83,51 +96,71 @@ This plugin has been always positively supporting mulltibyte characters.
 
 #### Commands
 
-* `:[range]SDChar` - Show the highlights of difference units for [range]
-* `:[range]RDChar` - Reset the highlights of difference units for [range]
-* `:[range]TDChar` - Toggle to show/reset the highlights for [range]
+* `:[range]SDChar`
+  * Show the highlights of difference units for [range]
+* `:[range]RDChar`
+  * Reset the highlights of difference units for [range]
+* `:[range]TDChar`
+  * Toggle to show/reset the highlights for [range]
+* `:[range]EDChar[!]`
+  * Echo the line for [range], by showing each corresponding unit together
+    in `[+...+]`/`[-...-]` or strike highlighting. Some equivalent units may be
+    shown as `...`. The line number is shown if `number` or `relativenumber`
+    option is set in the window. When [!] is used, all lines and all units
+    are displayed.
 
 #### Keymaps
 
-* `<Plug>ToggleDiffCharAllLines` (default: `<F7>` if not mapped) - Toggle to show/reset the highlights for all/selected lines
-* `<Plug>ToggleDiffCharCurrentLine` (default: `<F8>` if not mapped) - Toggle to show/reset the highlights for current/selected lines
-* `<Plug>JumpDiffCharPrevStart` (default: `[b`) - Jump cursor to the start position of the previous difference unit
-* `<Plug>JumpDiffCharNextStart` (default: `]b`) - Jump cursor to the start position of the next difference unit
-* `<Plug>JumpDiffCharPrevEnd` (default: `[e`) - Jump cursor to the end position of the previous difference unit
-* `<Plug>JumpDiffCharNextEnd` (default: `]e`) - Jump cursor to the end position of the next difference unit
+* `<Plug>ToggleDiffCharAllLines` (default: `<F7>`)
+  * Toggle to show/reset the highlights for all/selected lines
+* `<Plug>ToggleDiffCharCurrentLine` (default: `<F8>`)
+  * Toggle to show/reset the highlights for current/selected lines
+* `<Plug>JumpDiffCharPrevStart` (default: `[b`)
+  * Jump cursor to the start position of the previous difference unit
+* `<Plug>JumpDiffCharNextStart` (default: `]b`)
+  * Jump cursor to the start position of the next difference unit
+* `<Plug>JumpDiffCharPrevEnd` (default: `[e`)
+  * Jump cursor to the end position of the previous difference unit
+* `<Plug>JumpDiffCharNextEnd` (default: `]e`)
+  * Jump cursor to the end position of the next difference unit
+* `<Plug>GetDiffCharPair` (default: `<Leader>g`)
+  * Get a corresponding difference unit from another buffer to undo difference
+* `<Plug>PutDiffCharPair` (default: `<Leader>p`)
+  * Put a corresponding difference unit to another buffer to undo difference
 
 #### Options
 
 * `g:DiffUnit`, `t:DiffUnit` - Type of difference unit
- * 'Word1'  : \w\\+ word and any \W single character (default)
- * 'Word2'  : non-space and space words
- * 'Word3'  : \\< or \\> character class boundaries
- * 'Char'   : any single character
- * 'CSV(,)' : separated by characters such as ',', ';', and '\t'
+  * 'Word1'  : \w\\+ word and any \W single character (default)
+  * 'Word2'  : non-space and space words
+  * 'Word3'  : \\< or \\> character class boundaries
+  * 'Char'   : any single character
+  * 'CSV(,)' : separated by characters such as ',', ';', and '\t'
 * `g:DiffColors`, `t:DiffColors` - Matching colors for changed unit pairs (always DiffAdd for added units)
- * 0   : always DiffText (default)
- * 1   : 4 colors in fixed order
- * 2   : 8 colors in fixed order
- * 3   : 16 colors in fixed order
- * 100 : all colors defined in highlight option in dynamic random order
+  * 0   : always DiffText (default)
+  * 1   : 4 colors in fixed order
+  * 2   : 8 colors in fixed order
+  * 3   : 16 colors in fixed order
+  * 100 : all colors defined in highlight option in dynamic random order
 * `g:DiffPairVisible`, `t:DiffPairVisible` - Make a corresponding unit visible when cursor is moved on a difference unit
- * 2 : highlight with cursor-like color plus echo as a message (default)
- * 1 : highlight with cursor-like color
- * 0 : nothing visible
+  * 2 : highlight with cursor-like color plus echo as a message (default)
+  * 1 : highlight with cursor-like color
+  * 0 : nothing visible
 * `g:DiffUpdate`, `t:DiffUpdate` - Interactively updating the diff highlights while editing (available on vim 7.4)
- * 1 : enable (default)
- * 0 : disable
+  * 1 : enable (default)
+  * 0 : disable
 * `g:DiffSplitTime`, `t:DiffSplitTime` - A time length (ms) to apply the internal algorithm first
- * 0 ~ : (100 as default)
+  * 0 ~ : (100 as default)
 * `g:DiffModeSync`, `t:DiffModeSync`- Synchronously show/reset with diff mode
- * 1 : enable (default)
- * 0 : disable
+  * 1 : enable (default)
+  * 0 : disable
 * `g:DiffExpr`- Set `DiffCharExpr()` to the `diffexpr` option
- * 1 : enable (default)
- * 0 : disable
+  * 1 : enable (default)
+  * 0 : disable
 
 #### Demo
 
+![demo](demo.gif)
 ```viml
 :let t:DiffModeSync = 0
 :windo diffthis | windo set wrap
@@ -141,14 +174,15 @@ This plugin has been always positively supporting mulltibyte characters.
 
 :let t:DiffColors = 3
 :windo diffthis | windo set wrap
-<space>          " cursor move forward on line 3 in the left window
-]b               " several times on line 5 in the left window
-:diffoff!
+:EDChar          " echo line 3 together with corresponding difference unit
+:%EDChar!        " echo all lines along with the line number
 
-<F8>             " on line 1 in the left window
-<F8>             " on line 5 in the left window
-<F7>
-'<,'><F8>        " select a block of lines from 3 to 5 in the left window
-<F7>
+<space>          " move cursor forward on line 1 and
+<space>          " make its corresponding unit pair visible
+...
+]b\g             " jump to the next difference unit on line 3 and
+]b\g             " get each unit pair from another buffer to undo difference
+...
+
+:diffoff!
 ```
-![demo](demo.gif)

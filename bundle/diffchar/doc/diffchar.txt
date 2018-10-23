@@ -8,8 +8,8 @@
  |     || || |   | |   |  |__ |  _  ||  _  || |  | |
  |____| |_||_|   |_|   |_____||_| |_||_| |_||_|  |_|
 <
-Last Change: 2016/12/23
-Version:     6.5
+Last Change: 2018/07/22
+Version:     7.6
 Author:      Rick Howe <rdcxy754@ybb.ne.jp>
 
 -----------------------------------------------------------------------------
@@ -47,6 +47,16 @@ changed units are highlighted with DiffText. In addition, DiffAdd is always
 used for the added units and both the previous and next character of the
 deleted units are shown in bold/underline.
 
+In order to check the actual differences in a line, you can use |:EDChar|
+command and echo the lines for range. A changed, added, and deleted unit is
+shown as [-...-][+...+], [+...+], and [-...-] respectively, while showing its
+highlight. If a strike highlighting is available such as on GUI and some
+terminal, the deleted unit is highlighted with the strike instead and [+, +],
+[-, and -] are eliminated. This command tries to shorten some equivalent units
+and show ... instead, if the line is too long to fit on the command line.
+The line number is shown if 'number' or 'relativenumber' option is set in the
+window. When [!] is used, nothing is shorten and all lines are displayed.
+
 This plugin traces the differences based on a |g:DiffUnit|. Its default is
 'Word1' and it handles a \w\+ word and a \W character as a difference unit.
 There are other types of word provided and you can also set 'Char' to compare
@@ -61,8 +71,11 @@ You can use ]b or ]e to jump cursor to start or end position of the next
 difference unit, and [b or [e to the start or end position of the previous
 unit. Those keymaps, <F7> and <F8> are configurable in your vimrc and so on.
 
-This plugin always keeps the exact differences updated while editing if a
-|g:DiffUpdate| is enabled and TextChanged/TextChangedI events are available.
+This plugin always keeps the exact differences updated while editing if
+|g:DiffUpdate| is enabled and TextChanged/InsertLeave events are available.
+Like line-based diffget/diffput and do/dp vim commands, you can use
+<Leader>g and <Leader>p commands in normal mode to get and put each difference
+unit, where the cursor is on, between 2 buffers and undo its difference.
 
 This plugin has been using "An O(NP) Sequence Comparison Algorithm" developed
 by S.Wu, et al., which always finds an optimum sequence quickly. But for
@@ -91,17 +104,29 @@ This plugin has been always positively supporting mulltibyte characters.
 -----------------------------------------------------------------------------
 COMMANDS                                               *diffchar-commands*
 
-:[range]SDChar - Show the highlights of difference units for [range]
-:[range]RDChar - Reset the highlights of difference units for [range]
-:[range]TDChar - Toggle to show/reset the highlights for [range]
+:[range]SDChar
+    Show the highlights of difference units for [range]
+
+:[range]RDChar
+    Reset the highlights of difference units for [range]
+
+:[range]TDChar
+    Toggle to show/reset the highlights for [range]
+
+:[range]EDChar[!]
+    Echo the line for [range], by showing each corresponding unit together
+    in `[+...+]`/`[-...-]` or strike highlighting. Some equivalent units may be
+    shown as `...`. The line number is shown if 'number' or 'relativenumber'
+    option is set in the window. When [!] is used, all lines and all units
+    are displayed.
 
 -----------------------------------------------------------------------------
 KEYMAPS                                                *diffchar-keymaps*
 
-<Plug>ToggleDiffCharAllLines (default: <F7> if not mapped)
+<Plug>ToggleDiffCharAllLines (default: <F7>)
     Toggle to show/reset the highlights for all/selected lines
 
-<Plug>ToggleDiffCharCurrentLine (default: <F8> if not mapped)
+<Plug>ToggleDiffCharCurrentLine (default: <F8>)
     Toggle to show/reset the highlights for current/selected lines
 
 <Plug>JumpDiffCharPrevStart (default: [b)
@@ -115,6 +140,12 @@ KEYMAPS                                                *diffchar-keymaps*
 
 <Plug>JumpDiffCharNextEnd (default: ]e)
     Jump cursor to the end position of the next difference unit
+
+<Plug>GetDiffCharPair (default: <Leader>g)
+    Get a corresponding difference unit from another buffer to undo difference
+
+<Plug>PutDiffCharPair (default: <Leader>p)
+    Put a corresponding difference unit to another buffer to undo difference
 
 -----------------------------------------------------------------------------
 OPTIONS                                                *diffchar-options*
@@ -162,6 +193,74 @@ OPTIONS                                                *diffchar-options*
 
 -----------------------------------------------------------------------------
 CHANGE HISTORY                                         *diffchar-history*
+
+Update : 7.6
+* Improved to make DiffChar highlights draw faster by:
+  - setting a priority of matchaddpos()/matchadd() with the line number and
+    calling matchaddpos()/matchadd()/matchdelete() in the order of which
+    vim can internally handle them earlier.
+  - drawing vim's diff mode highlights (as a workaround for 7.4.682)
+    only on non-DiffChar lines.
+  - not changing the highlight option.
+
+Update : 7.5
+* Enhanced to update DiffChar highlights much faster when adding or deleting
+  some lines.
+* Improved :EDChar command to show the line number if 'number' or
+  'relativenumber' option is set in the window.
+
+Update : 7.4
+* Fixed to properly update DiffChar highlights while editing:
+  - when some lines were added or deleted, all the rest lines below became
+    deselected and unhighlighted.
+  - since it was not fast enough to update the highlights in insert mode,
+    changed to use InsertLeave event instead of TextChangedI.
+* Fixed not to unexpectedly select and highlight all of diff lines when
+  :diffupdate was executed, if some of those lines had been selected.
+
+Update : 7.3
+* Modified not to change the highlight option when drawing diffchar
+  highlightings as nvim 2.1 does not allow to change it.
+* Implemented a workaround for a defect of diff_hlID() in nvim 2.1.
+* Fixed to work DiffSplitTime correctly.
+
+Update : 7.2
+* Fixed to map only the keys which have not been mapped.
+
+Update : 7.1
+* Implemented a workaround for some defects and recent changes of vim,
+  including gettabvar() (patch 8.0.1160), matchadd() (8.0.1168) and
+  QuitPre (8.0.1204).
+* Fixed some defects.
+
+Update : 7.0
+* Defined new normal mode commands, <Leader>g and <Leader>p, to get and put
+  each difference unit between 2 buffers and undo its difference.
+* Changed :EDChar command to echo each difference unit with a strike
+  highlighting if available.
+* Fixed some defects.
+
+Update : 6.9
+* Fixed some regressions on 6.8:
+  - if DiffModeSync is enabled (default), when :diffupdate command is executed
+    or icase/iwhite of 'diffopt' option is changed, the diff highlights are
+    not synchronously updated.
+
+Update : 6.8
+* Changed to make use of an OptionSet event to detect diff mode for
+  DiffModeSync as it is implemented in patch 8.0.736.
+* Changed to completely reset all the DiffChar highlights and autocmd events
+  when other window/tabpage than current one is closed by quit, close,
+  tabclose or tabonly commands.
+* Fixed to avoid "E788: Not allowed to edit anoter buffer now" error happend
+  on patch 8.0.736.
+
+Update : 6.7
+* Fixed some defects on the :EDChar command.
+
+Update : 6.6
+* Defined a new :EDChar command to echo the line by enclosing added/deleted
+  units in [+...+]/[-...-].
 
 Update : 6.5
 * Enhanced:
