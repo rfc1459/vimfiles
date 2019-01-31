@@ -11,6 +11,29 @@ if !has('gui_running') && ($TERM =~ '^screen-256color')
   map! <Esc>OF <End>
 endif
 
+" Setup plugins
+call plug#begin('~/.vim/plugged')
+Plug 'https://github.com/tpope/vim-sensible.git'
+Plug 'https://github.com/jlanzarotta/bufexplorer.git'
+Plug 'https://github.com/ekalinin/Dockerfile.vim.git'
+Plug 'https://github.com/saltstack/salt-vim.git'
+Plug 'https://github.com/majutsushi/tagbar.git'
+Plug 'https://github.com/tpope/vim-dispatch.git'
+Plug 'https://github.com/tpope/vim-flagship.git'
+Plug 'https://github.com/tpope/vim-fugitive.git'
+Plug 'https://github.com/tpope/vim-git.git'
+Plug 'https://github.com/fatih/vim-go.git', { 'do': ':GoInstallBinaries' }
+Plug 'https://github.com/elzr/vim-json.git'
+Plug 'https://github.com/tpope/vim-markdown.git'
+Plug 'https://github.com/tpope/vim-repeat.git'
+Plug 'https://github.com/tpope/vim-surround.git'
+Plug 'https://github.com/salsifis/vim-transpose.git'
+Plug 'https://github.com/rickhowe/diffchar.vim.git'
+Plug 'https://github.com/janko-m/vim-test.git'
+Plug 'https://github.com/tmux-plugins/vim-tmux.git'
+Plug 'https://github.com/hashivim/vim-terraform.git'
+call plug#end()
+
 "Default indentation settings
 set shiftwidth=2
 set softtabstop=2
