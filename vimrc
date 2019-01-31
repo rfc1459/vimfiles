@@ -11,9 +11,6 @@ if !has('gui_running') && ($TERM =~ '^screen-256color')
   map! <Esc>OF <End>
 endif
 
-"Tell Pathogen to bring everything in
-execute pathogen#infect()
-
 "Default indentation settings
 set shiftwidth=2
 set softtabstop=2
