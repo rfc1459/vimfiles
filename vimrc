@@ -32,6 +32,7 @@ Plug 'https://github.com/rickhowe/diffchar.vim.git'
 Plug 'https://github.com/janko-m/vim-test.git'
 Plug 'https://github.com/tmux-plugins/vim-tmux.git'
 Plug 'https://github.com/hashivim/vim-terraform.git'
+Plug 'google/vim-searchindex'
 call plug#end()
 
 "Default indentation settings
