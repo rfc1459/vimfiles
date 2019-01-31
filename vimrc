@@ -11,8 +11,29 @@ if !has('gui_running') && ($TERM =~ '^screen-256color')
   map! <Esc>OF <End>
 endif
 
-"Tell Pathogen to bring everything in
-execute pathogen#infect()
+" Setup plugins
+call plug#begin('~/.vim/plugged')
+Plug 'tpope/vim-sensible'
+Plug 'jlanzarotta/bufexplorer'
+Plug 'ekalinin/Dockerfile.vim'
+Plug 'saltstack/salt-vim'
+Plug 'majutsushi/tagbar'
+Plug 'tpope/vim-dispatch'
+Plug 'tpope/vim-flagship'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-git'
+Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+Plug 'elzr/vim-json'
+Plug 'tpope/vim-markdown'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
+Plug 'salsifis/vim-transpose'
+Plug 'rickhowe/diffchar.vim'
+Plug 'janko-m/vim-test'
+Plug 'tmux-plugins/vim-tmux'
+Plug 'hashivim/vim-terraform'
+Plug 'google/vim-searchindex'
+call plug#end()
 
 "Default indentation settings
 set shiftwidth=2
