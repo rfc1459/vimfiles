@@ -22,7 +22,7 @@ Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-flagship'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-git'
-Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+Plug 'fatih/vim-go'
 Plug 'elzr/vim-json'
 Plug 'tpope/vim-markdown'
 Plug 'tpope/vim-repeat'
@@ -40,11 +40,6 @@ set shiftwidth=2
 set softtabstop=2
 set expandtab
 set smartindent
-
-"Add Go to the runtime path
-if !empty($GOROOT)
-  set runtimepath+=$GOROOT/misc/vim
-endif
 
 "Tab completion handling
 set wildmode=list:full
