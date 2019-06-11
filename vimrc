@@ -62,7 +62,7 @@ colorscheme molokai
 
 "Never *EVER* use modelines on versions of vim which are known to be
 "vulnerable to sandbox escaping. The keyword is "known", by the way.
-if v:version > 700 || v:version == 700 && has("patch234") && has("patch235")
+if v:version > 810 || v:version == 810 && has("patch1365")
   set modeline
   set modelines=5
 else
