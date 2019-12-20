@@ -33,6 +33,7 @@ Plug 'janko-m/vim-test'
 Plug 'tmux-plugins/vim-tmux'
 Plug 'hashivim/vim-terraform'
 Plug 'google/vim-searchindex'
+Plug 'tpope/vim-commentary'
 call plug#end()
 
 "Default indentation settings
