@@ -16,7 +16,6 @@ call plug#begin('~/.vim/plugged')
 Plug 'tpope/vim-sensible'
 Plug 'jlanzarotta/bufexplorer'
 Plug 'ekalinin/Dockerfile.vim'
-Plug 'saltstack/salt-vim'
 Plug 'majutsushi/tagbar'
 Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-flagship'
