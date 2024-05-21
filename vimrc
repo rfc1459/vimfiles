@@ -15,6 +15,7 @@ endif
 call plug#begin('~/.vim/plugged')
 Plug 'tpope/vim-sensible'
 Plug 'joshdick/onedark.vim'
+Plug 'vim-airline/vim-airline'
 Plug 'jlanzarotta/bufexplorer'
 Plug 'ekalinin/Dockerfile.vim'
 Plug 'majutsushi/tagbar'
@@ -112,9 +113,6 @@ else
   set listchars=tab:>\ ,trail:-,extends:>,precedes:<
 endif
 
-"Always show the tabline
-set showtabline=2
-
 "Folding settings
 set foldmethod=marker "Fold based on markers
 set foldnestmax=3     "Deepest fold is 3 levels
@@ -144,6 +142,12 @@ map <Leader>t :TagbarToggle<CR>
 map <F8> :TagbarToggle<CR>
 
 "Plugin configuration
+
+"vim-airline
+let g:airline_theme='onedark'
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#whitespace#enabled = 1
 
 "vim-json
 let g:vim_json_syntax_conceal = 0   "Don't hide double quotes in JSON files
