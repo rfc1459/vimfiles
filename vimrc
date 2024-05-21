@@ -11,28 +11,6 @@ if !has('gui_running') && ($TERM =~ '^screen-256color')
   map! <Esc>OF <End>
 endif
 
-" Setup plugins
-call plug#begin('~/.vim/plugged')
-Plug 'tpope/vim-sensible'
-Plug 'joshdick/onedark.vim'
-Plug 'vim-airline/vim-airline'
-Plug 'jlanzarotta/bufexplorer'
-Plug 'ekalinin/Dockerfile.vim'
-Plug 'majutsushi/tagbar'
-Plug 'tpope/vim-dispatch'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-git'
-Plug 'elzr/vim-json'
-Plug 'tpope/vim-markdown'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-surround'
-Plug 'salsifis/vim-transpose'
-Plug 'rickhowe/diffchar.vim'
-Plug 'tmux-plugins/vim-tmux'
-Plug 'google/vim-searchindex'
-Plug 'tpope/vim-commentary'
-call plug#end()
-
 "Default indentation settings
 set shiftwidth=2
 set softtabstop=2

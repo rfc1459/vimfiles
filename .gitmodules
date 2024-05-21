@@ -1,0 +1,54 @@
+[submodule "pack/rfc1459/start/vim-sensible"]
+	path = pack/rfc1459/start/vim-sensible
+	url = https://github.com/tpope/vim-sensible.git
+[submodule "pack/rfc1459/start/onedark.vim"]
+	path = pack/rfc1459/start/onedark.vim
+	url = https://github.com/joshdick/onedark.vim.git
+[submodule "pack/rfc1459/start/vim-airline"]
+	path = pack/rfc1459/start/vim-airline
+	url = https://github.com/vim-airline/vim-airline.git
+[submodule "pack/rfc1459/start/bufexplorer"]
+	path = pack/rfc1459/start/bufexplorer
+	url = https://github.com/jlanzarotta/bufexplorer.git
+[submodule "pack/rfc1459/start/Dockerfile.vim"]
+	path = pack/rfc1459/start/Dockerfile.vim
+	url = https://github.com/ekalinin/Dockerfile.vim.git
+[submodule "pack/rfc1459/start/tagbar"]
+	path = pack/rfc1459/start/tagbar
+	url = https://github.com/majutsushi/tagbar.git
+[submodule "pack/rfc1459/start/vim-dispatch"]
+	path = pack/rfc1459/start/vim-dispatch
+	url = https://github.com/tpope/vim-dispatch.git
+[submodule "pack/rfc1459/start/vim-fugitive"]
+	path = pack/rfc1459/start/vim-fugitive
+	url = https://github.com/tpope/vim-fugitive.git
+[submodule "pack/rfc1459/start/vim-git"]
+	path = pack/rfc1459/start/vim-git
+	url = https://github.com/tpope/vim-git.git
+[submodule "pack/rfc1459/start/vim-json"]
+	path = pack/rfc1459/start/vim-json
+	url = https://github.com/elzr/vim-json.git
+[submodule "pack/rfc1459/start/vim-markdown"]
+	path = pack/rfc1459/start/vim-markdown
+	url = https://github.com/tpope/vim-markdown.git
+[submodule "pack/rfc1459/start/vim-repeat"]
+	path = pack/rfc1459/start/vim-repeat
+	url = https://github.com/tpope/vim-repeat.git
+[submodule "pack/rfc1459/start/vim-surround"]
+	path = pack/rfc1459/start/vim-surround
+	url = https://github.com/tpope/vim-surround.git
+[submodule "pack/rfc1459/start/vim-transpose"]
+	path = pack/rfc1459/start/vim-transpose
+	url = https://github.com/salsifis/vim-transpose.git
+[submodule "pack/rfc1459/start/diffchar.vim"]
+	path = pack/rfc1459/start/diffchar.vim
+	url = https://github.com/rickhowe/diffchar.vim.git
+[submodule "pack/rfc1459/start/vim-tmux"]
+	path = pack/rfc1459/start/vim-tmux
+	url = https://github.com/tmux-plugins/vim-tmux.git
+[submodule "pack/rfc1459/start/vim-searchindex"]
+	path = pack/rfc1459/start/vim-searchindex
+	url = https://github.com/google/vim-searchindex.git
+[submodule "pack/rfc1459/start/vim-commentary"]
+	path = pack/rfc1459/start/vim-commentary
+	url = https://github.com/tpope/vim-commentary.git
