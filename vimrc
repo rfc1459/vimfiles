@@ -14,6 +14,7 @@ endif
 " Setup plugins
 call plug#begin('~/.vim/plugged')
 Plug 'tpope/vim-sensible'
+Plug 'joshdick/onedark.vim'
 Plug 'jlanzarotta/bufexplorer'
 Plug 'ekalinin/Dockerfile.vim'
 Plug 'majutsushi/tagbar'
@@ -64,9 +65,8 @@ if has('termguicolors')
 endif
 
 "Set the color scheme
-let g:molokai_original = 1
-let g:rehash256 = 1
-colorscheme molokai
+syntax on
+colorscheme onedark
 
 "Never *EVER* use modelines on versions of vim which are known to be
 "vulnerable to sandbox escaping. The keyword is "known", by the way.
