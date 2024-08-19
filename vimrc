@@ -43,6 +43,7 @@ if has('termguicolors')
 endif
 
 "Set the color scheme
+packadd! onedark.vim
 syntax on
 colorscheme onedark
 
