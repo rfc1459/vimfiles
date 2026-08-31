@@ -46,9 +46,6 @@
 [submodule "pack/rfc1459/start/vim-tmux"]
 	path = pack/rfc1459/start/vim-tmux
 	url = https://github.com/tmux-plugins/vim-tmux.git
-[submodule "pack/rfc1459/start/vim-searchindex"]
-	path = pack/rfc1459/start/vim-searchindex
-	url = https://github.com/google/vim-searchindex.git
 [submodule "pack/rfc1459/start/vim-commentary"]
 	path = pack/rfc1459/start/vim-commentary
 	url = https://github.com/tpope/vim-commentary.git

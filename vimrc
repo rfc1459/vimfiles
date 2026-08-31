@@ -67,6 +67,9 @@ set showmatch
 set incsearch
 set hlsearch
 
+"Replacement for vim-searchindex
+set shortmess-=S
+
 "Show line numbers
 set number
 
